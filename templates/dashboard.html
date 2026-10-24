@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h3 class="mb-4">📊 Welcome, {{ current_user.username }}</h3>
+
+{% if not records %}
+    <div class="card shadow-sm p-4 text-center">
+        <p class="mb-3">You haven't analyzed any resumes yet.</p>
+        <a href="{{ url_for('analyze') }}" class="btn btn-primary">Analyze Your First Resume</a>
+    </div>
+{% else %}
+    {% if chart_base64 %}
+    <div class="card shadow-sm p-3 mb-4 text-center">
+        <img src="data:image/png;base64,{{ chart_base64 }}" class="img-fluid" alt="Score History Chart">
+    </div>
+    {% endif %}
+
+    <div class="card shadow-sm p-3">
+        <h5 class="mb-3">Score History</h5>
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>Job Title</th>
+                    <th>Resume File</th>
+                    <th>Score</th>
+                    <th>Missing Keywords</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in records %}
+                <tr>
+                    <td>{{ r.job_title }}</td>
+                    <td>{{ r.resume_filename }}</td>
+                    <td>
+                        <span class="badge
+                            {% if r.score >= 70 %}bg-success
+                            {% elif r.score >= 40 %}bg-warning text-dark
+                            {% else %}bg-danger{% endif %}">
+                            {{ r.score }}%
+                        </span>
+                    </td>
+                    <td class="small text-muted">{{ r.missing_keywords[:60] }}{% if r.missing_keywords|length > 60 %}...{% endif %}</td>
+                    <td class="small">{{ r.created_at.strftime('%d %b %Y, %H:%M') }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="text-center mt-4 mb-4">
+        <a href="{{ url_for('analyze') }}" class="btn btn-primary">+ New Analysis</a>
+    </div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}New Analysis{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm p-4 mt-3">
+            <h3 class="mb-4">🔍 Analyze Your Resume</h3>
+            <form method="POST" action="{{ url_for('analyze') }}" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label class="form-label">Job Title (optional)</label>
+                    <input type="text" name="job_title" class="form-control" placeholder="e.g. Data Analyst">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Upload Resume (PDF / DOCX / TXT)</label>
+                    <input type="file" name="resume" class="form-control" accept=".pdf,.docx,.txt" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Paste Job Description</label>
+                    <textarea name="job_description" rows="8" class="form-control" placeholder="Paste the job description here..." required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Get ATS Score</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

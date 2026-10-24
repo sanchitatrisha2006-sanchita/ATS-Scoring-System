@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Analysis Result{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm p-4 mt-3 text-center">
+            <h3 class="mb-2">Result for: {{ job_title or "Untitled Job" }}</h3>
+            <div class="score-circle mx-auto my-3
+                {% if result.score >= 70 %}score-good
+                {% elif result.score >= 40 %}score-medium
+                {% else %}score-low{% endif %}">
+                {{ result.score }}%
+            </div>
+            <p class="text-muted">ATS Match Score (Resume vs Job Description)</p>
+        </div>
+
+        <div class="card shadow-sm p-4 mt-3">
+            <h5>🧩 Missing Keywords / Skills</h5>
+            {% if result.missing_keywords %}
+                <div class="mt-2">
+                    {% for kw in result.missing_keywords %}
+                        <span class="badge bg-danger me-1 mb-1">{{ kw }}</span>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="text-success mb-0">No major missing keywords found — great job!</p>
+            {% endif %}
+        </div>
+
+        <div class="card shadow-sm p-4 mt-3">
+            <h5>💡 Suggestions</h5>
+            <ul class="mb-0">
+                {% for s in result.suggestions %}
+                    <li>{{ s }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="text-center mt-4 mb-4">
+            <a href="{{ url_for('analyze') }}" class="btn btn-outline-primary me-2">Analyze Another</a>
+            <a href="{{ url_for('dashboard') }}" class="btn btn-primary">Go to Dashboard</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
